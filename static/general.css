@@ -1,9 +1,0 @@
-.navbar-menu {
-  max-height: 0;
-  overflow: hidden;
-  transition: max-height 0.5s ease !important; 
-}
-
-.navbar-menu.is-active {
-   max-height: 500px;
-}

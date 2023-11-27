@@ -3,7 +3,7 @@ from flask_login import UserMixin
 
 @login_manager.user_loader
 def load_user(user_id):
-  return Usuario.query.get(int(user_id))
+  return Usuario.query.get(user_id)
 
 class Usuario(db.Model, UserMixin):
   run = db.Column(db.String(10), primary_key=True)
@@ -14,3 +14,6 @@ class Usuario(db.Model, UserMixin):
   rol = db.Column(db.Integer, nullable=False)
   estado = db.Column(db.Integer, nullable=False)
   telefono = db.Column(db.String(20), nullable=True)
+  
+  def get_id(self):
+    return self.run

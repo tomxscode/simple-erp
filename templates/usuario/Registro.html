@@ -2,5 +2,81 @@
 {% block titulo %}Registro{% endblock %}
 
 {% block contenido %}
-  Hola
+<h2>
+  Registro
+</h2>
+<form method="post">
+  {{ form.hidden_tag() }}
+  <div class="field">
+    {{ form.run.label(class="label") }}
+    <div class="control has-icons-left">
+      {{ form.run(class="input", placeholder="11222333-4") }}
+      <span class="icon is-small is-left">
+        <i class='bx bxs-user-detail'></i>
+      </span>
+    </div>
+    <p class="help">
+      Sin puntos y guión
+    </p>
+  </div>
+  <div class="field">
+    {{ form.email.label(class="label") }}
+    <div class="control has-icons-left">
+      {{ form.email(class="input", placeholder="johndoe@company.cl") }}
+      <span class="icon is-small is-left">
+        <i class='bx bx-envelope'></i>
+      </span>
+    </div>
+  </div>
+  <div class="columns">
+    <div class="column">
+      <div class="field">
+        {{ form.nombre.label(class="label") }}
+        <div class="control has-icons-left">
+          {{ form.nombre(class="input", placeholder="John") }}
+          <span class="icon is-small is-left">
+            <i class='bx bxs-user'></i>
+          </span>
+        </div>
+      </div>
+    </div>
+    <div class="column">
+      <div class="field">
+        {{ form.apellido.label(class="label") }}
+        <div class="control has-icons-left">
+          {{ form.apellido(class="input", placeholder="Doe") }}
+          <span class="icon is-small is-left">
+            <i class='bx bxs-user'></i>
+          </span>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="field">
+    {{ form.telefono.label(class="label") }}
+    <div class="control has-icons-left">
+      {{ form.telefono(class="input", placeholder="912345678") }}
+      <span class="icon is-small is-left">
+        <i class='bx bxs-phone'></i>
+      </span>
+    </div>
+    <p class="help">
+      Este campo es opcional *
+    </p>
+  </div>
+  <div class="field">
+    {{ form.pin.label(class="label") }}
+    <div class="control has-icons-left">
+      {{ form.pin(class="input") }}
+      <span class="icon is-small is-left">
+        <i class='bx bxs-shield' ></i>
+      </span>
+    </div>
+  </div>
+
+  <div class="field">
+    {{ form.submit(class="button is-fullwidth is-primary") }}
+  </div>
+  
+</form>
 {% endblock %}

@@ -1,0 +1,14 @@
+.navbar {
+  padding: 1rem 2rem;
+  background: #fff; 
+  border-bottom: 1px solid #eee;
+}
+
+.navbar-menu {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center; 
+} 
+
+/* Estilos adicionales...*/

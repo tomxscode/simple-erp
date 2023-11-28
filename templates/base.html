@@ -117,7 +117,7 @@
   {% if messages %}
   {% for category, message in messages %}
   <script>
-    iziToast.{ { category } } ({
+    iziToast.{{ category }} ({
       message: '{{ message }}'
     });
   </script>

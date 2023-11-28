@@ -28,7 +28,7 @@ def login():
     else:
       login_user(usuario)
       flash('Sesión iniciada correctamente', 'success')
-      return "Exito"
+      return redirect(url_for('usuario.registro'))
   return render_template('usuario/Login.html', form=form)
 
 @usuario.route('/usuario/registro', methods=['GET', 'POST'])

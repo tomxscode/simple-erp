@@ -7,3 +7,4 @@ class Empresa(db.Model):
   telefono = db.Column(db.String(20), nullable=False)
   email = db.Column(db.String(100), nullable=False)
   rut = db.Column(db.String(22), nullable=False)
+  giro = db.Column(db.String(100), nullable=False)

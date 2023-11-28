@@ -23,4 +23,5 @@ class EmpresaForm(FlaskForm):
   telefono = StringField('Telefono', validators=[DataRequired()])
   direccion = StringField('Direccion', validators=[DataRequired()])
   email = StringField('Email', validators=[DataRequired()])
+  giro = StringField('Giro', validators=[DataRequired()])
   submit = SubmitField('Guardar')

@@ -26,7 +26,8 @@ def api_empresa():
         'direccion': empresa.direccion,
         'telefono': empresa.telefono,
         'email': empresa.email,
-        'rut': empresa.rut
+        'rut': empresa.rut,
+        'giro': empresa.giro
       })
     return jsonify(empresas_json), 200
   elif request.method == 'POST':
@@ -42,7 +43,8 @@ def api_empresa():
       direccion=request.json['direccion'],
       telefono=request.json['telefono'],
       email=request.json['email'],
-      rut=request.json['rut']
+      rut=request.json['rut'],
+      giro=request.json['giro']
     )
     db.session.add(empresa)
     db.session.commit()
@@ -56,6 +58,7 @@ def api_empresa():
     empresa.telefono = request.json['telefono']
     empresa.email = request.json['email']
     empresa.rut = request.json['rut']
+    empresa.giro = request.json['giro']
     db.session.commit()
     return jsonify({'success': True, 'message': 'Empresa actualizada correctamente'}), 200
   
@@ -81,7 +84,8 @@ def api_empresa_id(id):
     'direccion': empresa.direccion,
     'telefono': empresa.telefono,
     'email': empresa.email,
-    'rut': empresa.rut
+    'rut': empresa.rut,
+    'giro': empresa.giro
   }), 200
   
 @empresa.route('/empresa/listar', methods=['GET'])
@@ -108,7 +112,8 @@ def crear():
       direccion=form.direccion.data,
       telefono=form.telefono.data,
       email=form.email.data,
-      rut=form.rut.data
+      rut=form.rut.data,
+      giro=form.giro.data
     )
     db.session.add(empresa)
     db.session.commit()
@@ -133,6 +138,7 @@ def descargar_empresas():
   hoja_calculo['D1'] = 'EMAIL'
   hoja_calculo['E1'] = 'TELEFONO'
   hoja_calculo['F1'] = 'DIRECCION'
+  hoja_calculo['G1'] = 'GIRO'
   
   # Datos
   for fila, empresa in enumerate(empresas, start=2):
@@ -142,6 +148,7 @@ def descargar_empresas():
     hoja_calculo['D' + str(fila)] = empresa.email
     hoja_calculo['E' + str(fila)] = empresa.telefono
     hoja_calculo['F' + str(fila)] = empresa.direccion
+    hoja_calculo['G' + str(fila)] = empresa.giro
     
   # Guardar el libro en un archivo temporal
   archivo_temporal = tempfile.NamedTemporaryFile(delete=False)

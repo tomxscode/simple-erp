@@ -58,6 +58,16 @@
     </div>
 
     <div class="field">
+      {{ form.giro.label(class="label") }}
+      <div class="control has-icons-left">
+        {{ form.giro(class="input", placeholder="Otros servicios NCP") }}
+        <span class="icon is-small is-left">
+          <i class='bx bxs-buildings'></i>
+        </span>
+      </div>
+    </div>
+
+    <div class="field">
       {{ form.submit(class="button is-fullwidth is-primary") }}
     </div>
     <div class="field">

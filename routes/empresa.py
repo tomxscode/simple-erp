@@ -1,8 +1,8 @@
-from flask import Blueprint, request, jsonify
+from flask import Blueprint, request, jsonify, flash, url_for, redirect, render_template
 from flask_login import current_user, login_required
 from models import db
 from models.Empresa import Empresa
-from flask import render_template
+from forms import EmpresaForm
 
 empresa = Blueprint('empresa', __name__)
 
@@ -88,3 +88,26 @@ def listar():
   # Obtener todas las empresas y paginarlas
   empresas = Empresa.query.paginate(page=pagina, per_page=por_pagina, error_out=False)
   return render_template('empresa/listar.html', empresas=empresas)
+
+@empresa.route('/empresa/crear', methods=['GET', 'POST'])
+@login_required
+def crear():
+  form = EmpresaForm()
+  if form.validate_on_submit():
+    # Comprobar que el rut no esté repetido
+    if Empresa.query.filter_by(rut=form.rut.data).first():
+      flash('Ya existe una empresa con ese rut', 'error')
+      return redirect(url_for('empresa.crear'))
+    # Crear empresa
+    empresa = Empresa(
+      nombre=form.nombre.data,
+      direccion=form.direccion.data,
+      telefono=form.telefono.data,
+      email=form.email.data,
+      rut=form.rut.data
+    )
+    db.session.add(empresa)
+    db.session.commit()
+    flash('Empresa creada correctamente', 'success')
+    return redirect(url_for('empresa.listar'))
+  return render_template('empresa/crear.html', form=form)

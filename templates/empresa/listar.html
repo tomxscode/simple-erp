@@ -4,6 +4,9 @@
 {% block contenido %}
 <div class="content">
   <h1>Empresas</h1>
+  <div class="buttons">
+    <a href="{{ url_for('empresa.crear') }}" class="button is-success">Registrar empresa</a>
+  </div>
   <div class="table-container">
     <table class="table is-bordered is-striped is-narrow is-hoverable is-fullwidth">
       <thead>
@@ -35,15 +38,15 @@
   </div>
   <nav class="pagination" role="navigation" aria-label="pagination">
     {% if empresas.has_prev %}
-      <a class="pagination-previous" href="{{ url_for('empresa.listar', pagina=empresas.prev_num, por_pagina=request.args.get('por_pagina')) }}">Anterior</a>
+      <a class="pagination-previous" href="{{ url_for('empresa.listar', pagina=empresas.prev_num, por_pagina=request.args.get('por_pagina')) }}"><i class='bx bxs-chevron-left'></i></a>
     {% else %}
-      <a class="pagination-previous is-disabled" disabled>Anterior</a>
+      <a class="pagination-previous is-disabled" disabled><i class='bx bxs-chevron-left'></i></a>
     {% endif %}
   
     {% if empresas.has_next %}
-      <a class="pagination-next" href="{{ url_for('empresa.listar', pagina=empresas.next_num, por_pagina=request.args.get('por_pagina')) }}">Siguiente</a>
+      <a class="pagination-next" href="{{ url_for('empresa.listar', pagina=empresas.next_num, por_pagina=request.args.get('por_pagina')) }}"><i class='bx bxs-chevron-right'></i></a>
     {% else %}
-      <a class="pagination-next is-disabled" disabled>Siguiente</a>
+      <a class="pagination-next is-disabled" disabled><i class='bx bxs-chevron-right'></i></a>
     {% endif %}
   
     <ul class="pagination-list">

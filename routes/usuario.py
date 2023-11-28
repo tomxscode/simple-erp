@@ -3,7 +3,8 @@ from flask_login import login_required, current_user, login_user
 from models import db
 from models.Usuario import Usuario
 from forms import RegistroForm, LoginForm
-from utils.validar_run import validar_rut
+#from utils.validar_run import validar_rut deprecado
+from rut_chile import rut_chile
 from utils.check_email import validar_email
 from flask import url_for, redirect
 from flask_login import logout_user
@@ -16,15 +17,19 @@ usuario = Blueprint('usuario', __name__)
 def login():
   form = LoginForm()
   if form.validate_on_submit():
-    if not validar_rut(form.run.data):
+    if not rut_chile.is_valid_rut(form.run.data):
       flash('El run ingresado no es válido', 'error')
+      return redirect(url_for('usuario.login'))
     usuario = Usuario.query.filter_by(run=form.run.data).first()
+    if not usuario:
+      flash('El usuario no existe', 'error')
+      return redirect(url_for('usuario.login'))
     # Desencriptar el pin
     bcrypt = Bcrypt()
     pin = bcrypt.check_password_hash(usuario.pin, form.pin.data)
     # Comprobar si el pin es correcto y si el usuario está activo
-    if not pin or not usuario:
-      flash('El run o el pin son incorrectos', 'error')
+    if not pin:
+      flash('El pin es incorrecto', 'error')
       return redirect(url_for('usuario.login'))
     else:
       login_user(usuario)
@@ -38,7 +43,7 @@ def registro():
   form = RegistroForm()
   if form.validate_on_submit():
     # Comprobar si el run es un run chileno válido
-    if not validar_rut(form.run.data):
+    if not rut_chile.is_valid_rut(form.run.data):
       flash('El run ingresado no es válido', 'error')
       return redirect(url_for('usuario.registro'))
     # Revisar el email es válido

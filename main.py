@@ -6,6 +6,9 @@ app.secret_key = "Xxxxxx"
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///data.db'
 db.init_app(app)
 login_manager.init_app(app)
+login_manager.login_view = 'usuario.login'
+login_manager.login_message = 'Necesitas iniciar sesión para realizar esta acción'
+login_manager.login_message_category = 'error'
 
 from routes.usuario import usuario
 

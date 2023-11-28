@@ -10,3 +10,8 @@ class RegistroForm(FlaskForm):
   telefono = StringField('Telefono')
   pin = PasswordField('Pin', validators=[DataRequired(), Length(max=4)])
   submit = SubmitField('Registrar')
+  
+class LoginForm(FlaskForm):
+  run = StringField('Run', validators=[DataRequired()])
+  pin = PasswordField('Pin', validators=[DataRequired(), Length(max=4)])
+  submit = SubmitField('Iniciar Sesión')

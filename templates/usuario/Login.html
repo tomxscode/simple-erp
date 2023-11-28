@@ -1,0 +1,34 @@
+{% extends "base.html" %}
+{% block titulo %}Inicio de sesión{% endblock %}
+
+{% block contenido %}
+<h2>
+  Inicio de sesión
+</h2>
+<form method="post">
+  {{ form.hidden_tag() }}
+  <div class="field">
+    {{ form.run.label(class="label") }}
+    <div class="control has-icons-left">
+      {{ form.run(class="input", placeholder="11222333-4") }}
+      <span class="icon is-small is-left">
+        <i class='bx bxs-user-detail'></i>
+      </span>
+    </div>
+  </div>
+  <div class="field">
+    {{ form.pin.label(class="label") }}
+    <div class="control has-icons-left">
+      {{ form.pin(class="input") }}
+      <span class="icon is-small is-left">
+        <i class='bx bxs-shield' ></i>
+      </span>
+    </div>
+  </div>
+
+  <div class="field">
+    {{ form.submit(class="button is-fullwidth is-primary") }}
+  </div>
+  
+</form>
+{% endblock %}

@@ -81,6 +81,7 @@ def api_empresa_id(id):
   }), 200
   
 @empresa.route('/empresa/listar', methods=['GET'])
+@login_required
 def listar():
   pagina = request.args.get('pagina', 1, type=int)
   por_pagina = request.args.get('por_pagina', 10, type=int)

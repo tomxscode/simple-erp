@@ -8,6 +8,7 @@ from utils.check_email import validar_email
 from flask import url_for, redirect
 from flask_login import logout_user
 from flask_bcrypt import Bcrypt
+from flask import request
 
 usuario = Blueprint('usuario', __name__)
 
@@ -28,7 +29,8 @@ def login():
     else:
       login_user(usuario)
       flash('Sesión iniciada correctamente', 'success')
-      return redirect(url_for('usuario.registro'))
+      next_page = request.args.get('next')
+      return redirect(next_page or url_for('usuario.registro'))
   return render_template('usuario/Login.html', form=form)
 
 @usuario.route('/usuario/registro', methods=['GET', 'POST'])

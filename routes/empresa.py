@@ -1,8 +1,12 @@
+from datetime import datetime
 from flask import Blueprint, request, jsonify, flash, url_for, redirect, render_template
 from flask_login import current_user, login_required
 from models import db
 from models.Empresa import Empresa
 from forms import EmpresaForm
+import openpyxl
+import tempfile
+from flask import send_file
 
 empresa = Blueprint('empresa', __name__)
 
@@ -111,3 +115,41 @@ def crear():
     flash('Empresa creada correctamente', 'success')
     return redirect(url_for('empresa.listar'))
   return render_template('empresa/crear.html', form=form)
+
+# Descarga de Excel
+@empresa.route('/empresa/descargar/empresas', methods=['GET'])
+@login_required
+def descargar_empresas():
+  empresas = Empresa.query.all()
+  
+  # Crear un nuevo libro
+  libro_trabajo = openpyxl.Workbook()
+  hoja_calculo = libro_trabajo.active
+  
+  # Encabezados
+  hoja_calculo['A1'] = 'ID'
+  hoja_calculo['B1'] = 'RUT'
+  hoja_calculo['C1'] = 'NOMBRE'
+  hoja_calculo['D1'] = 'EMAIL'
+  hoja_calculo['E1'] = 'TELEFONO'
+  hoja_calculo['F1'] = 'DIRECCION'
+  
+  # Datos
+  for fila, empresa in enumerate(empresas, start=2):
+    hoja_calculo['A' + str(fila)] = empresa.id
+    hoja_calculo['B' + str(fila)] = empresa.rut
+    hoja_calculo['C' + str(fila)] = empresa.nombre
+    hoja_calculo['D' + str(fila)] = empresa.email
+    hoja_calculo['E' + str(fila)] = empresa.telefono
+    hoja_calculo['F' + str(fila)] = empresa.direccion
+    
+  # Guardar el libro en un archivo temporal
+  archivo_temporal = tempfile.NamedTemporaryFile(delete=False)
+  libro_trabajo.save(archivo_temporal.name)
+  
+  # Generar el nombre del archivo de descarga: empresa_FECHA Y HORA DE HOY.xlsx
+  fecha_hora = datetime.now().strftime('%Y-%m-%d_%H-%M-%S')
+  nombre_archivo = 'empresa_' + fecha_hora + '.xlsx'
+  
+  # Descargar el archivo temporal
+  return send_file(archivo_temporal.name, as_attachment=True, download_name=nombre_archivo)

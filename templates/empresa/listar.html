@@ -5,7 +5,8 @@
 <div class="content">
   <h1>Empresas</h1>
   <div class="buttons">
-    <a href="{{ url_for('empresa.crear') }}" class="button is-success">Registrar empresa</a>
+    <a href="{{ url_for('empresa.crear') }}" class="button is-success">Registrar empresa <i class='ml-2 bx bxs-plus-square'></i></a>
+    <a href="{{ url_for('empresa.descargar_empresas') }}" class="button is-info">Descargar Excel <i class='ml-2 bx bxs-file-export'></i></a>
   </div>
   <div class="table-container">
     <table class="table is-bordered is-striped is-narrow is-hoverable is-fullwidth">

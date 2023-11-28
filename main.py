@@ -11,8 +11,10 @@ login_manager.login_message = 'Necesitas iniciar sesión para realizar esta acci
 login_manager.login_message_category = 'error'
 
 from routes.usuario import usuario
+from routes.empresa import empresa
 
 app.register_blueprint(usuario)
+app.register_blueprint(empresa)
 
 with app.app_context():
   db.create_all()

@@ -7,6 +7,7 @@ from utils.validar_run import validar_rut
 from utils.check_email import validar_email
 from flask import url_for, redirect
 from flask_login import logout_user
+from flask_bcrypt import Bcrypt
 
 usuario = Blueprint('usuario', __name__)
 
@@ -16,10 +17,14 @@ def login():
   if form.validate_on_submit():
     if not validar_rut(form.run.data):
       flash('El run ingresado no es válido', 'error')
-    # Comprobar que la contraseña es válida (pin)
     usuario = Usuario.query.filter_by(run=form.run.data).first()
-    if usuario is None or not usuario.pin == form.pin.data:
+    # Desencriptar el pin
+    bcrypt = Bcrypt()
+    pin = bcrypt.check_password_hash(usuario.pin, form.pin.data)
+    # Comprobar si el pin es correcto y si el usuario está activo
+    if not pin or not usuario:
       flash('El run o el pin son incorrectos', 'error')
+      return redirect(url_for('usuario.login'))
     else:
       login_user(usuario)
       flash('Sesión iniciada correctamente', 'success')
@@ -27,17 +32,23 @@ def login():
   return render_template('usuario/Login.html', form=form)
 
 @usuario.route('/usuario/registro', methods=['GET', 'POST'])
-@login_required
 def registro():
   form = RegistroForm()
   if form.validate_on_submit():
     # Comprobar si el run es un run chileno válido
     if not validar_rut(form.run.data):
       flash('El run ingresado no es válido', 'error')
+      return redirect(url_for('usuario.registro'))
     # Revisar el email es válido
     if not validar_email(form.email.data):
       flash('El email ingresado no es válido', 'error')
-    
+      return redirect(url_for('usuario.registro'))
+
+    # Encriptar el PIN con bcrypt
+    bcrypt = Bcrypt()
+    hashed_pin = bcrypt.generate_password_hash(form.pin.data).decode('utf-8')
+    form.pin.data = hashed_pin
+
     # Crear el usuario
     usuario = Usuario(
       run=form.run.data,
@@ -60,5 +71,5 @@ def registro():
 @login_required
 def logout():
   logout_user()
-  flash('Sesión cerrada correctamente', 'success')
+  flash('Sesión cerrada correctamente', 'success')  
   return redirect(url_for('usuario.login'))

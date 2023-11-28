@@ -20,29 +20,29 @@
       <a class="navbar-item" href="#">
         <h1>Simple ERP</h1>
       </a>
-  
+
       <a role="button" class="navbar-burger" aria-label="menu" aria-expanded="false">
         <span aria-hidden="true"></span>
         <span aria-hidden="true"></span>
         <span aria-hidden="true"></span>
       </a>
     </div>
-  
+
     <div class="navbar-menu">
       <div class="navbar-start">
         <a class="navbar-item">
           Home
         </a>
-  
+
         <a class="navbar-item">
           Documentation
         </a>
-  
+
         <div class="navbar-item has-dropdown is-hoverable">
           <a class="navbar-link">
             More
           </a>
-  
+
           <div class="navbar-dropdown">
             <a class="navbar-item">
               About
@@ -60,18 +60,46 @@
           </div>
         </div>
       </div>
-  
+
       <div class="navbar-end">
+        {% if not current_user.is_authenticated %}
         <div class="navbar-item">
+
           <div class="buttons">
-            <a class="button is-primary">
-              <strong>Sign up</strong>
+            <a class="button is-primary" href="{{ url_for('usuario.registro') }}">
+              <strong>Registro</strong>
             </a>
-            <a class="button is-light">
-              Log in
+            <a class="button is-light" href="{{ url_for('usuario.login') }}">
+              Iniciar sesión
             </a>
           </div>
         </div>
+
+        {% else %}
+        <div class="navbar-item has-dropdown is-hoverable">
+          <a class="navbar-link">
+            {{ current_user.nombre }} {{ current_user.apellido }}
+          </a>
+
+          <div class="navbar-dropdown">
+            <a class="navbar-item">
+              Acción 1
+            </a>
+            <a class="navbar-item">
+              Acción 2
+            </a>
+            <a class="navbar-item">
+              Acción 3
+            </a>
+            <hr class="navbar-divider">
+            <div class="navbar-item">
+              <div class="buttons">
+                <a href="{{ url_for('usuario.logout') }}" class="button is-danger">Cerrar sesión</a>
+              </div>
+            </div>
+          </div>
+        </div>
+        {% endif %}
       </div>
     </div>
   </nav>
@@ -89,7 +117,7 @@
   {% if messages %}
   {% for category, message in messages %}
   <script>
-    iziToast.{{category}}({
+    iziToast.{ { category } } ({
       message: '{{ message }}'
     });
   </script>

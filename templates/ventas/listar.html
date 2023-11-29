@@ -1,0 +1,83 @@
+{% extends "base.html" %}
+{% block titulo %}Listar Ventas{% endblock %}
+
+{% block contenido %}
+<div class="content">
+  <h1>Ventas</h1>
+  <div class="buttons">
+    <a href="{{ url_for('ventas.crear_venta') }}" class="button is-success">Crear venta <i class='ml-2 bx bxs-plus-square'></i></a>
+    <a href="{{ url_for('empresa.descargar_empresas') }}" class="button is-info">Descargar Excel <i class='ml-2 bx bxs-file-export'></i></a>
+  </div>
+  <div class="table-container">
+    <table class="table is-bordered is-striped is-narrow is-hoverable is-fullwidth">
+      <thead>
+        <tr>
+          <th>FECHA</th>
+          <th>MES</th>
+          <th>MANDANTE</th>
+          <th>EMPRESA</th>
+          <th>GLOSA</th>
+          <th>NETO</th>
+          <th>IVA</th>
+          <th>TOTAL</th>
+          <th>FACTURA</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for venta in ventas %}
+        <tr style="cursor: pointer;">
+          <td>{{ convertir_fecha(venta.fecha) }}</td>
+          <td>{{ convertir_mes(venta.fecha) }}</td>
+          <td>{{ obtener_nombre_empresa(venta.empresa_mandante) }}</td>
+          <td>{{ obtener_nombre_empresa(venta.empresa_venta) }}</td>
+          <td>{{ obtener_glosa(venta.factura) }}</td>
+          <td>{{ dinero_formato(venta.monto_neto) }}</td>
+          <td>{{ dinero_formato(venta.monto_iva) }}</td>
+          <td>{{ dinero_formato(venta.monto_total) }}</td>
+          <td>{{ obtener_num_factura(venta.factura) }}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+      <tfoot>
+        <tr>
+          <td colspan="9">Ventas totales: {{ ventas.total }}</td>
+        </tr>
+      </tfoot>
+    </table>
+  </div>
+  <nav class="pagination" role="navigation" aria-label="pagination">
+    {% if ventas.has_prev %}
+      <a class="pagination-previous" href="{{ url_for('ventas.listar', pagina=ventas.prev_num, por_pagina=request.args.get('por_pagina')) }}"><i class='bx bxs-chevron-left'></i></a>
+    {% else %}
+      <a class="pagination-previous is-disabled" disabled><i class='bx bxs-chevron-left'></i></a>
+    {% endif %}
+  
+    {% if ventas.has_next %}
+      <a class="pagination-next" href="{{ url_for('ventas.listar', pagina=ventas.next_num, por_pagina=request.args.get('por_pagina')) }}"><i class='bx bxs-chevron-right'></i></a>
+    {% else %}
+      <a class="pagination-next is-disabled" disabled><i class='bx bxs-chevron-right'></i></a>
+    {% endif %}
+  
+    <ul class="pagination-list">
+      {% for pag_num in ventas.iter_pages() %}
+        {% if pag_num %}
+          {% if pag_num == ventas.page %}
+            <li>
+              <a class="pagination-link is-current" aria-label="Página {{ pag_num }}" aria-current="page">{{ pag_num }}</a>
+            </li>
+          {% else %}
+            <li>
+              <a class="pagination-link" aria-label="Página {{ pag_num }}" href="{{ url_for('ventas.listar', pagina=pag_num, por_pagina=request.args.get('por_pagina')) }}">{{ pag_num }}</a>
+            </li>
+          {% endif %}
+        {% else %}
+          <li><span class="pagination-ellipsis">&hellip;</span></li>
+        {% endif %}
+      {% endfor %}
+    </ul>
+  </nav>
+  
+</div>
+{% endblock %}
+{% block scripts %}
+{% endblock %}

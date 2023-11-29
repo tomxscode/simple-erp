@@ -1,3 +1,4 @@
+import locale
 from flask import Blueprint, request, jsonify, render_template, flash, redirect, url_for
 from models.Factura import Factura, DetalleFactura
 from models.Venta import Venta
@@ -76,5 +77,42 @@ def crear_venta():
     db.session.add(nueva_venta)
     db.session.commit()
     flash("Venta #" + str(nueva_venta.id) + " creada", 'success')
-    return redirect(url_for('ventas.crear_venta'))
+    return redirect(url_for('ventas.listar'))
   return render_template('ventas/crear.html', form=form)
+
+@ventas.route('/ventas/listar', methods=['GET'])
+def listar():
+  pagina = request.args.get('pagina', 1, type=int)
+  por_pagina = request.args.get('por_pagina', 10, type=int)
+  ventas = Venta.query.paginate(page=pagina, per_page=por_pagina, error_out=False)
+  
+  def obtener_nombre_empresa(empresa_id):
+    empresa = Empresa.query.get(empresa_id)
+    if empresa:
+      return empresa.nombre
+    return None
+  
+  def obtener_glosa(factura_id):
+    factura = Factura.query.get(factura_id)
+    if factura:
+      return factura.glosa
+    return None
+  
+  def obtener_num_factura(factura_id):
+    factura = Factura.query.get(factura_id)
+    if factura:
+      return factura.numero_factura
+    return None
+  
+  def dinero_formato(monto):
+    return f"${monto:,.0f}"
+  
+  def convertir_mes(fecha):
+    locale.setlocale(locale.LC_TIME, 'es_ES.UTF-8')
+    return fecha.strftime("%B %Y")
+  
+  def convertir_fecha(fecha):
+    locale.setlocale(locale.LC_TIME, 'es_ES.UTF-8')
+    return fecha.strftime("%d/%m/%Y")
+  
+  return render_template('ventas/listar.html', ventas=ventas, obtener_nombre_empresa=obtener_nombre_empresa, obtener_glosa=obtener_glosa, obtener_num_factura=obtener_num_factura, dinero_formato=dinero_formato, convertir_mes=convertir_mes, convertir_fecha=convertir_fecha)

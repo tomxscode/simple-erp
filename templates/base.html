@@ -5,11 +5,14 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>{% block titulo %}Sin título{% endblock %} - Simple ERP</title>
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css">
   <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/izitoast/1.4.0/css/iziToast.css"
     integrity="sha512-DIW4FkYTOxjCqRt7oS9BFO+nVOwDL4bzukDyDtMO7crjUZhwpyrWBFroq+IqRe6VnJkTpRAS6nhDvf0w+wHmxg=="
     crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+  <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
   <link rel="stylesheet" href="{{ url_for('static', filename='/general.css') }}">
 </head>
 
@@ -40,18 +43,21 @@
           </a>
 
           <div class="navbar-dropdown">
-            <a class="navbar-item">
-              About
+            <a class="navbar-item" href="{{ url_for('empresa.listar') }}">
+              Empresas
             </a>
             <a class="navbar-item">
-              Jobs
+              Facturas
+            </a>
+            <a class="navbar-item" href="{{ url_for('ventas.listar') }}">
+              Ventas
             </a>
             <a class="navbar-item">
-              Contact
+              Compras
             </a>
             <hr class="navbar-divider">
             <a class="navbar-item">
-              Report an issue
+              Opción separada
             </a>
           </div>
         </div>
@@ -114,7 +120,7 @@
   {% if messages %}
   {% for category, message in messages %}
   <script>
-    iziToast.{{ category }} ({
+    iziToast.{ { category } } ({
       message: '{{ message }}'
     });
   </script>

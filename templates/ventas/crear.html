@@ -10,8 +10,13 @@
       <div class="column">
         <div class="field">
           {{ form.empresa_mandante.label(class="label") }}
+          <p class="help">
+            Digite el RUT o busque la empresa por su RUT o Nombre en la sección inferior
+          </p>
           <div class="control has-icons-left">
-            {{ form.empresa_mandante(class="input", placeholder="77123456-1") }}
+            {{ form.empresa_mandante(class="input mb-2", placeholder="77123456-1") }}
+            <select class="select2" id="empresa_mandante_select" name="empresa_mandante_select" style="width: 100%;">
+            </select>
             <span class="icon is-small is-left">
               <i class='bx bxs-building'></i>
             </span>
@@ -21,8 +26,13 @@
       <div class="column">
         <div class="field">
           {{ form.empresa_venta.label(class="label") }}
+          <p class="help">
+            Digite el RUT o busque la empresa por su RUT o Nombre en la sección inferior
+          </p>
           <div class="control has-icons-left">
-            {{ form.empresa_venta(class="input", placeholder="77123456-1") }}
+            {{ form.empresa_venta(class="input mb-2", placeholder="77123456-1") }}
+            <select class="select2" id="empresa_venta_select" name="empresa_venta_select" style="width: 100%;">
+            </select>
             <span class="icon is-small is-left">
               <i class='bx bxs-building'></i>
             </span>
@@ -30,6 +40,7 @@
         </div>
       </div>
     </div>
+
     <div class="field">
       {{ form.factura.label(class="label") }}
       <p class="help">
@@ -88,9 +99,12 @@
       {{ form.submit(class="button is-fullwidth is-primary") }}
     </div>
     <div class="field">
-      <a href="{{ url_for('empresa.listar') }}" class="button is-fullwidth is-info is-outlined">Volver</a>
+      <a href="{{ url_for('ventas.listar') }}" class="button is-fullwidth is-info is-outlined">Volver</a>
     </div>
 
   </form>
 </div>
+{% endblock %}
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/crear_venta.js') }}"></script>
 {% endblock %}

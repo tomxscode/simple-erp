@@ -1,3 +1,4 @@
+import datetime
 import locale
 from flask import Blueprint, request, jsonify, render_template, flash, redirect, url_for
 from models.Factura import Factura, DetalleFactura
@@ -6,6 +7,10 @@ from models.Empresa import Empresa
 from forms import VentaForm
 from flask_login import current_user
 from models import db
+import openpyxl
+from utils.general import convertir_mes, convertir_fecha, dinero_formato
+import tempfile
+from flask import send_file
 
 ventas = Blueprint('ventas', __name__)
 
@@ -104,15 +109,67 @@ def listar():
       return factura.numero_factura
     return None
   
-  def dinero_formato(monto):
-    return f"${monto:,.0f}"
-  
-  def convertir_mes(fecha):
-    locale.setlocale(locale.LC_TIME, 'es_ES.UTF-8')
-    return fecha.strftime("%B %Y")
-  
-  def convertir_fecha(fecha):
-    locale.setlocale(locale.LC_TIME, 'es_ES.UTF-8')
-    return fecha.strftime("%d/%m/%Y")
-  
   return render_template('ventas/listar.html', ventas=ventas, obtener_nombre_empresa=obtener_nombre_empresa, obtener_glosa=obtener_glosa, obtener_num_factura=obtener_num_factura, dinero_formato=dinero_formato, convertir_mes=convertir_mes, convertir_fecha=convertir_fecha)
+
+@ventas.route('/ventas/descargar/todas', methods=['GET'])
+def descargar_todas():
+  def obtener_nombre_empresa(empresa_id):
+    empresa = Empresa.query.get(empresa_id)
+    if empresa:
+      return empresa.nombre
+    return None
+  
+  def obtener_glosa(factura_id):
+    factura = Factura.query.get(factura_id)
+    if factura:
+      return factura.glosa
+    return None
+  
+  def obtener_num_factura(factura_id):
+    factura = Factura.query.get(factura_id)
+    if factura:
+      return factura.numero_factura
+    return None
+  
+  ventas = Venta.query.all()
+  
+  libro_trabajo = openpyxl.Workbook()
+  hoja_calculo = libro_trabajo.active
+  
+  hoja_calculo['A1'] = 'ID'
+  hoja_calculo['B1'] = 'FECHA'
+  hoja_calculo['C1'] = 'MES'
+  hoja_calculo['D1'] = 'MANDANTE'
+  hoja_calculo['E1'] = 'EMPRESA'
+  hoja_calculo['F1'] = 'GLOSA'
+  hoja_calculo['G1'] = 'MONTO NETO'
+  hoja_calculo['H1'] = 'MONTO IVA'
+  hoja_calculo['I1'] = 'MONTO TOTAL'
+  hoja_calculo['J1'] = 'FACTURA'
+  hoja_calculo['K1'] = 'ESTADO'
+  
+  hoja_calculo.title = 'Ventas'
+  
+  for fila, venta in enumerate(ventas, start=2):
+    hoja_calculo['A' + str(fila)] = venta.id
+    hoja_calculo['B' + str(fila)] = convertir_fecha(venta.fecha)
+    hoja_calculo['C' + str(fila)] = convertir_mes(venta.fecha)
+    hoja_calculo['D' + str(fila)] = obtener_nombre_empresa(venta.empresa_mandante)
+    hoja_calculo['E' + str(fila)] = obtener_nombre_empresa(venta.empresa_venta)
+    hoja_calculo['F' + str(fila)] = obtener_glosa(venta.factura)
+    hoja_calculo['G' + str(fila)] = venta.monto_neto
+    hoja_calculo['H' + str(fila)] = venta.monto_iva
+    hoja_calculo['I' + str(fila)] = venta.monto_total
+    hoja_calculo['J' + str(fila)] = obtener_num_factura(venta.factura)
+    if venta.estado:
+      hoja_calculo['K' + str(fila)] = 'PAGADA'
+    else:
+      hoja_calculo['K' + str(fila)] = 'POR PAGAR'
+    
+  archivo_temporal = tempfile.NamedTemporaryFile(delete=False)
+  libro_trabajo.save(archivo_temporal.name)
+  
+  fecha_hora = datetime.datetime.now().strftime('%Y-%m-%d_%H-%M-%S')
+  nombre_archivo = 'ventas_' + fecha_hora + '.xlsx'
+  
+  return send_file(archivo_temporal.name, as_attachment=True, download_name=nombre_archivo)

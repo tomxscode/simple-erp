@@ -1,0 +1,96 @@
+{% extends "base.html" %}
+{% block titulo %}Crear venta{% endblock %}
+
+{% block contenido %}
+<div class="content">
+  <h1>Registrar venta</h1>
+  <form method="post">
+    {{ form.hidden_tag() }}
+    <div class="columns">
+      <div class="column">
+        <div class="field">
+          {{ form.empresa_mandante.label(class="label") }}
+          <div class="control has-icons-left">
+            {{ form.empresa_mandante(class="input", placeholder="77123456-1") }}
+            <span class="icon is-small is-left">
+              <i class='bx bxs-building'></i>
+            </span>
+          </div>
+        </div>
+      </div>
+      <div class="column">
+        <div class="field">
+          {{ form.empresa_venta.label(class="label") }}
+          <div class="control has-icons-left">
+            {{ form.empresa_venta(class="input", placeholder="77123456-1") }}
+            <span class="icon is-small is-left">
+              <i class='bx bxs-building'></i>
+            </span>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="field">
+      {{ form.factura.label(class="label") }}
+      <p class="help">
+        ¿No tiene una factura creada? <strong>Déjela en blanco para crearla automáticamente</strong>, podrá editarla después
+      </p>
+      <div class="control has-icons-left">
+        {{ form.factura(class="input", placeholder="Número de factura") }}
+        <span class="icon is-small is-left">
+          <i class='bx bx-paperclip'></i>
+        </span>
+      </div>
+    </div>
+    <div class="field">
+      {{ form.glosa.label(class="label") }}
+      <div class="control has-icons-left">
+        {{ form.glosa(class="input", placeholder="Artículos de aseo") }}
+        <span class="icon is-small is-left">
+          <i class='bx bx-edit-alt'></i>
+        </span>
+      </div>
+    </div>
+    <div class="field">
+      {{ form.monto_neto.label(class="label") }}
+      <div class="control has-icons-left">
+        {{ form.monto_neto(class="input", placeholder="500000") }}
+        <span class="icon is-small is-left">
+          <i class='bx bx-dollar' ></i>
+        </span>
+      </div>
+    </div>
+
+    <div class="field">
+      {{ form.fecha.label(class="label") }}
+      <div class="control has-icons-left">
+        {{ form.fecha(class="input", placeholder="") }}
+        <span class="icon is-small is-left">
+          <i class='bx bx-calendar' ></i>
+        </span>
+      </div>
+    </div>
+
+    <div class="field">
+      {{ form.estado.label(class="label") }}
+      <div class="control has-icons-left">
+        <div class="select">
+          {{ form.estado(class="select", placeholder="") }}
+        </div>
+        <span class="icon is-small is-left">
+          <i class='bx bx-calendar' ></i>
+        </span>
+      </div>
+    </div>
+
+
+    <div class="field">
+      {{ form.submit(class="button is-fullwidth is-primary") }}
+    </div>
+    <div class="field">
+      <a href="{{ url_for('empresa.listar') }}" class="button is-fullwidth is-info is-outlined">Volver</a>
+    </div>
+
+  </form>
+</div>
+{% endblock %}

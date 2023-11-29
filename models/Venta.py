@@ -9,3 +9,4 @@ class Venta(db.Model):
   monto_neto = db.Column(db.Float, nullable=False)
   monto_iva = db.Column(db.Float, nullable=False)
   monto_total = db.Column(db.Float, nullable=False)
+  estado = db.Column(db.Integer, nullable=False)

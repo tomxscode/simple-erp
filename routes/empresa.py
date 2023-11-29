@@ -140,6 +140,9 @@ def descargar_empresas():
   hoja_calculo['F1'] = 'DIRECCION'
   hoja_calculo['G1'] = 'GIRO'
   
+  # Establecer como encabezado
+  hoja_calculo.title = 'Empresas'
+  
   # Datos
   for fila, empresa in enumerate(empresas, start=2):
     hoja_calculo['A' + str(fila)] = empresa.id

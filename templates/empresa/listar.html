@@ -22,7 +22,7 @@
       </thead>
       <tbody>
         {% for empresa in empresas %}
-        <tr>
+        <tr onclick="infoEmpresa({{empresa.id}})" style="cursor: pointer;">
           <td>{{ empresa.rut }}</td>
           <td>{{ empresa.nombre }}</td>
           <td>{{ empresa.direccion }}</td>
@@ -72,4 +72,7 @@
   </nav>
   
 </div>
+{% endblock %}
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/empresa.js') }}"></script>
 {% endblock %}

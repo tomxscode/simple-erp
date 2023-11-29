@@ -85,10 +85,11 @@ def crear_venta():
     return redirect(url_for('ventas.listar'))
   return render_template('ventas/crear.html', form=form)
 
-@ventas.route('/ventas/listar', methods=['GET'])
+@ventas.route('/ventas/listar', methods=['GET', 'POST'])
 def listar():
   pagina = request.args.get('pagina', 1, type=int)
   por_pagina = request.args.get('por_pagina', 10, type=int)
+      
   ventas = Venta.query.paginate(page=pagina, per_page=por_pagina, error_out=False)
   
   def obtener_nombre_empresa(empresa_id):

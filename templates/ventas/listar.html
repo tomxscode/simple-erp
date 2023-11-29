@@ -10,6 +10,8 @@
     <a href="{{ url_for('ventas.descargar_todas') }}" class="button is-info">Descargar Excel <i
         class='ml-2 bx bxs-file-export'></i></a>
   </div>
+
+
   <div class="table-container">
     <table class="table is-bordered is-striped is-narrow is-hoverable is-fullwidth">
       <thead>
@@ -94,6 +96,8 @@
   </nav>
 
 </div>
+
 {% endblock %}
 {% block scripts %}
+<script src="{{ url_for('static', filename='js/listar_ventas.js') }}"></script>
 {% endblock %}

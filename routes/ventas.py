@@ -8,7 +8,7 @@ from forms import VentaForm
 from flask_login import current_user
 from models import db
 import openpyxl
-from utils.general import convertir_mes, convertir_fecha, dinero_formato
+from utils.general import convertir_mes, convertir_fecha, dinero_formato, obtener_rango_mes
 import tempfile
 from flask import send_file
 
@@ -87,10 +87,47 @@ def crear_venta():
 
 @ventas.route('/ventas/listar', methods=['GET', 'POST'])
 def listar():
+  query = Venta.query
+  
+  filtro_mes = request.args.get('filtro_mes', type=str)
+  filtro_estado = request.args.get('filtro_estado', type=int)
+  
+  ordenar_por = request.args.get('ordenar_por', type=str)
+  
+  if ordenar_por:
+    if ordenar_por == 'fecha':
+      query = query.order_by(Venta.fecha)
+    elif ordenar_por == 'monto_neto':
+      query = query.order_by(Venta.monto_neto)
+    elif ordenar_por == 'monto_iva':
+      query = query.order_by(Venta.monto_iva)
+    elif ordenar_por == 'monto_total':
+      query = query.order_by(Venta.monto_total)
+    elif ordenar_por == 'estado':
+      query = query.order_by(Venta.estado)
+    else:
+      flash('El ordenamiento por no es válido', 'error')
+      
+  if filtro_mes:
+    primer_dia, ultimo_dia = obtener_rango_mes(filtro_mes)
+    query = query.filter(Venta.fecha >= primer_dia, Venta.fecha <= ultimo_dia)
+    if query.count() == 0:
+      flash('No se encontraron ventas en el mes seleccionado', 'warning')
+      filtro_mes = None
+    
+  if filtro_estado:
+    # Comprobar que filtro estado sea solo 0 o 1
+    if filtro_estado not in [0, 1]:
+      flash('El estado debe ser 0 o 1', 'error')
+      # Vaciar filtro estado
+      filtro_estado = None
+    else:
+      query = query.filter(Venta.estado == int(filtro_estado))
+  
   pagina = request.args.get('pagina', 1, type=int)
   por_pagina = request.args.get('por_pagina', 10, type=int)
       
-  ventas = Venta.query.paginate(page=pagina, per_page=por_pagina, error_out=False)
+  ventas = query.paginate(page=pagina, per_page=por_pagina, error_out=False)
   
   def obtener_nombre_empresa(empresa_id):
     empresa = Empresa.query.get(empresa_id)

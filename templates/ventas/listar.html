@@ -94,7 +94,11 @@
           <td>{{ dinero_formato(venta.monto_neto) }}</td>
           <td>{{ dinero_formato(venta.monto_iva) }}</td>
           <td>{{ dinero_formato(venta.monto_total) }}</td>
-          <td>{{ obtener_num_factura(venta.factura) }}</td>
+          <td>
+            <a href="{{ url_for('factura.ver_factura', id=venta.factura) }}">
+            {{ obtener_num_factura(venta.factura) }} <i class='bx bx-link-external' ></i>
+            </a>
+          </td>
           <td>
             {% if venta.estado %}
             <span class="tag is-success">Pagada</span>

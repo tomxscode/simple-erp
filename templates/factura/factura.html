@@ -1,0 +1,56 @@
+{% extends "base.html" %}
+{% block titulo %}Factura {{ factura.numero_factura }}{% endblock %}
+
+{% block contenido %}
+<div class="content">
+  <h1>Factura {{ factura.numero_factura }}</h1>
+  <p>
+    Factura con fecha <strong>{{ convertir_fecha(factura.fecha_factura) }}</strong> a la empresa <strong>{{
+      obtener_nombre_empresa(factura.empresa_id) }}</strong>, con el concepto de: "<strong>{{ factura.glosa
+      }}</strong>", por un monto neto de <strong>{{ dinero_formato(factura.monto_neto) }}</strong>, un IVA de <strong>{{
+      dinero_formato(factura.monto_iva) }}</strong>, dando un total de: <strong>{{ dinero_formato(factura.monto_neto +
+      factura.monto_iva) }}</strong> pesos chilenos.
+  </p>
+  <div class="buttons">
+  </div>
+
+  <div class="table-container">
+    <table class="table is-bordered is-striped is-narrow is-hoverable is-fullwidth">
+      <thead>
+        <tr>
+          <th>CANTIDAD</th>
+          <th>DESCRIPCIÓN</th>
+          <th>PRECIO UNITARIO</th>
+          <th>MONTO NETO</th>
+          <th>IVA (19%)</th>
+          <th>TOTAL</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for detalle in detalles %}
+        <tr>
+          <td>{{ detalle.cantidad }}x</td>
+          <td>{{ detalle.descripcion }}</td>
+          <td>{{ dinero_formato(detalle.precio_unitario) }}</td>
+          <td>{{ dinero_formato(detalle.monto_neto) }}</td>
+          <td>{{ dinero_formato(detalle.monto_iva) }}</td>
+          <td>{{ dinero_formato(detalle.monto_neto + detalle.monto_iva) }}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+      <tfoot>
+        <tr>
+          <td colspan="3">Totales</td>
+          <td>{{ dinero_formato(factura.monto_neto) }}</td>
+          <td>{{ dinero_formato(factura.monto_iva) }}</td>
+          <td>{{ dinero_formato(factura.monto_neto + factura.monto_iva) }}</td>
+        </tr>
+      </tfoot>
+    </table>
+
+  </div>
+</div>
+
+{% endblock %}
+{% block scripts %}
+{% endblock %}

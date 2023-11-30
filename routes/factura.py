@@ -1,10 +1,14 @@
 import datetime
-from flask import Blueprint, request, jsonify, render_template
+from flask import Blueprint, redirect, request, jsonify, render_template
 from models import db
 from models.Factura import Factura, DetalleFactura
 from models.Empresa import Empresa
 from models.Usuario import Usuario
-from utils.general import convertir_fecha, dinero_formato
+from models.Venta import Venta
+from utils.general import convertir_fecha, dinero_formato, actualizar_venta_montos
+from forms import DetalleFacturaForm
+from flask import flash
+from flask import url_for
 
 factura = Blueprint('factura', __name__)
 
@@ -52,3 +56,56 @@ def ver_factura(id):
     return None
   
   return render_template('factura/factura.html', factura=factura, detalles=detalles, obtener_nombre_empresa=obtener_nombre_empresa, convertir_fecha=convertir_fecha, dinero_formato=dinero_formato)
+
+@factura.route('/factura/detalle/<int:id>', methods=['GET', 'POST'])
+def detalle_factura(id):
+  form = DetalleFacturaForm()
+  factura = Factura.query.get(id)
+  if form.validate_on_submit():
+    detalle = DetalleFactura(
+      descripcion = form.descripcion.data,
+      cantidad = form.cantidad.data,
+      precio_unitario = form.precio_unitario.data,
+      monto_neto = form.precio_unitario.data * form.cantidad.data,
+      monto_iva = float(form.precio_unitario.data * form.cantidad.data) * 0.19,
+      factura_id = id
+    )
+    db.session.add(detalle)
+    db.session.commit()
+    flash('Detalle agregado correctamente', 'success')
+    if actualizar_factura(id):
+      flash('Factura actualizada correctamente', 'success')
+      venta = Venta.query.filter_by(factura=id).first()
+      if venta:
+        actualizar_venta_montos(venta.id)
+        flash('Venta actualizada correctamente', 'success')
+    else:
+      flash('Error al actualizar la factura', 'error')
+    return redirect(url_for('factura.ver_factura', id=id))
+  return render_template('factura/detalle_factura.html', form=form, factura=factura, convertir_fecha=convertir_fecha, dinero_formato=dinero_formato)
+
+@factura.route('/factura/actualizar/<int:id>')
+def actualizar_montos(id):
+  if actualizar_factura(id):
+    flash('Factura actualizada correctamente', 'success')
+    # Obtener la Venta según la factura asociada
+    venta = Venta.query.filter_by(factura=id).first()
+    if venta:
+      actualizar_venta_montos(venta.id)
+      flash('Venta actualizada correctamente', 'success')
+  else:
+    flash('Error al actualizar la factura', 'error')
+  return redirect(url_for('factura.ver_factura', id=id))
+  
+
+def actualizar_factura(id):
+  factura = Factura.query.get(id)
+  if factura:
+    factura.monto_neto = 0
+    factura.monto_iva = 0
+    for detalle in DetalleFactura.query.filter_by(factura_id=id).all():
+      factura.monto_neto += detalle.monto_neto
+      factura.monto_iva += detalle.monto_iva
+    db.session.commit()
+    return True
+  return False

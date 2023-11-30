@@ -1,6 +1,6 @@
 from flask_wtf import FlaskForm
 from wtforms.validators import DataRequired, Email, Length
-from wtforms import StringField, PasswordField, SubmitField, DateField, SelectField
+from wtforms import StringField, PasswordField, SubmitField, DateField, SelectField, IntegerField
 
 class RegistroForm(FlaskForm):
   run = StringField('Run', validators=[DataRequired()])
@@ -36,4 +36,11 @@ class VentaForm(FlaskForm):
   glosa = StringField('Glosa')
   monto_neto = StringField('Monto Neto', validators=[DataRequired()])
   estado = SelectField('Estado', choices=[(0, 'Por pagar'), (1, 'Pagada')], validators=[DataRequired()])
+  submit = SubmitField('Guardar')
+  
+# Facturas
+class DetalleFacturaForm(FlaskForm):
+  descripcion = StringField('Descripcion', validators=[DataRequired()])
+  cantidad = IntegerField('Cantidad', validators=[DataRequired()])
+  precio_unitario = IntegerField('Precio Unitario', validators=[DataRequired()])
   submit = SubmitField('Guardar')

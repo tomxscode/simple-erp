@@ -1,5 +1,9 @@
 from datetime import datetime, timedelta
 import locale
+from models.Factura import Factura
+from models import db
+
+from models.Venta import Venta
 
 
 def dinero_formato(monto):
@@ -24,3 +28,11 @@ def obtener_rango_mes(input_fecha):
     ultimo_dia = (fecha_obj.replace(day=28) + timedelta(days=4)).replace(day=1) - timedelta(days=1)
 
     return primer_dia, ultimo_dia
+  
+def actualizar_venta_montos(id_venta):
+  venta = Venta.query.get(id_venta)
+  factura = Factura.query.filter_by(id=venta.factura).first()
+  venta.monto_neto = factura.monto_neto
+  venta.monto_iva = factura.monto_iva
+  venta.monto_total = factura.monto_neto + factura.monto_iva
+  db.session.commit()

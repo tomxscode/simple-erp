@@ -47,7 +47,10 @@
         </tr>
       </tfoot>
     </table>
-
+    <div class="buttons">
+        <a href="{{ url_for('factura.detalle_factura', id=factura.id) }}" class="button is-fullwidth is-success">Agregar producto</a>
+        <a href="{{ url_for('factura.actualizar_montos', id=factura.id) }}" class="button is-fullwidth is-warning is-outlined">Actualizar factura</a>
+    </div>
   </div>
 </div>
 

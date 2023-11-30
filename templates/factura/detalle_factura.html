@@ -1,0 +1,58 @@
+{% extends "base.html" %}
+{% block titulo %}Agregar producto{% endblock %}
+
+{% block contenido %}
+<div class="content">
+  <h1>Agregar producto</h1>
+  <form method="post">
+    {{ form.hidden_tag() }}
+    <div class="columns">
+      <div class="column">
+        <div class="field">
+          {{ form.cantidad.label(class="label") }}
+          <div class="control has-icons-left">
+            {{ form.cantidad(class="input mb-2", placeholder="1") }}
+            <span class="icon is-small is-left">
+              <i class='bx bx-list-plus' ></i>
+            </span>
+          </div>
+        </div>
+      </div>
+      <div class="column">
+        <div class="field">
+          {{ form.descripcion.label(class="label") }}
+          <div class="control has-icons-left">
+            {{ form.descripcion(class="input mb-2", placeholder="Arriendo diario") }}
+            <span class="icon is-small is-left">
+              <i class='bx bx-detail' ></i>
+            </span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="field">
+      {{ form.precio_unitario.label(class="label") }}
+      <div class="control has-icons-left">
+        {{ form.precio_unitario(class="input", placeholder="149000") }}
+        <span class="icon is-small is-left">
+          <i class='bx bx-dollar'></i>
+        </span>
+      </div>
+    </div>
+
+    <div class="field">
+      {{ form.submit(class="button is-fullwidth is-primary") }}
+    </div>
+    <div class="field">
+      <a href="{{ url_for('factura.ver_factura', id=factura.id) }}" class="button is-fullwidth is-info is-outlined">Volver</a>
+    </div>
+    <div class="field">
+      <a href="{{ url_for('factura.actualizar_montos', id=factura.id) }}" class="button is-fullwidth is-warning is-outlined">Actualizar factura</a>
+    </div>
+
+  </form>
+</div>
+{% endblock %}
+{% block scripts %}
+{% endblock %}

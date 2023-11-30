@@ -59,7 +59,7 @@ def crear_venta():
         factura_id = nueva_factura.id,
         descripcion = venta_info['glosa'] + " TEMPORAL",
         cantidad = 1,
-        precio_unitario = monto_neto + (monto_neto * 0.19),
+        precio_unitario = monto_neto,
         monto_neto = monto_neto,
         monto_iva = monto_neto * 0.19
       )

@@ -15,16 +15,72 @@
     <table class="table is-bordered is-striped is-narrow is-hoverable is-fullwidth">
       <thead>
         <tr>
-          <th>FECHA</th>
+          <th>
+            {% if not request.args.get('ordenar_por') %}
+            <a
+              href="{{ url_for('ventas.listar', pagina=request.args.get('pagina'), por_pagina=request.args.get('por_pagina'), ordenar_por='fecha') }}">
+              FECHA
+              <i class='bx bx-sort' ></i>
+            </a>
+            {% else %}
+            <a
+              href="{{ url_for('ventas.listar', pagina=request.args.get('pagina'), por_pagina=request.args.get('por_pagina')) }}">
+              FECHA
+              <i class='bx bx-x'></i>
+            </a>
+            {% endif %}
+          </th>
           <th>MES</th>
           <th>MANDANTE</th>
-          <th>EMPRESA</th>
+          <th>
+            {% if not request.args.get('ordenar_por') %}
+            <a
+              href="{{ url_for('ventas.listar', pagina=request.args.get('pagina'), por_pagina=request.args.get('por_pagina'), ordenar_por='empresa_venta') }}">
+              EMPRESA
+              <i class='bx bx-sort' ></i>
+            </a>
+            {% else %}
+            <a
+              href="{{ url_for('ventas.listar', pagina=request.args.get('pagina'), por_pagina=request.args.get('por_pagina')) }}">
+              EMPRESA
+              <i class='bx bx-x'></i>
+            </a>
+            {% endif %}
+          </th>
           <th>GLOSA</th>
           <th>NETO</th>
           <th>IVA</th>
-          <th>TOTAL</th>
+          <th>
+            {% if not request.args.get('ordenar_por') %}
+            <a
+              href="{{ url_for('ventas.listar', pagina=request.args.get('pagina'), por_pagina=request.args.get('por_pagina'), ordenar_por='monto_total') }}">
+              TOTAL
+              <i class='bx bx-sort' ></i>
+            </a>
+            {% else %}
+            <a
+              href="{{ url_for('ventas.listar', pagina=request.args.get('pagina'), por_pagina=request.args.get('por_pagina')) }}">
+              TOTAL
+              <i class='bx bx-x'></i>
+            </a>
+            {% endif %}
+          </th>
           <th>FACTURA</th>
-          <th>ESTADO</th>
+          <th>
+            {% if not request.args.get('ordenar_por') %}
+            <a
+              href="{{ url_for('ventas.listar', pagina=request.args.get('pagina'), por_pagina=request.args.get('por_pagina'), ordenar_por='estado') }}">
+              ESTADO
+              <i class='bx bx-sort' ></i>
+            </a>
+            {% else %}
+            <a
+              href="{{ url_for('ventas.listar', pagina=request.args.get('pagina'), por_pagina=request.args.get('por_pagina')) }}">
+              ESTADO
+              <i class='bx bx-x'></i>
+            </a>
+            {% endif %}
+          </th>
         </tr>
       </thead>
       <tbody>
@@ -51,7 +107,23 @@
       </tbody>
       <tfoot>
         <tr>
-          <td colspan="10">Ventas totales: {{ ventas.total }}</td>
+          <td colspan="10">
+            Ventas totales: {{ ventas.total }}
+             | 
+            {% if request.args.get('ordenar_de') == 'asc' %}
+            <a
+              href="{{ url_for('ventas.listar', pagina=request.args.get('pagina'), por_pagina=request.args.get('por_pagina'), ordenar_por=request.args.get('ordenar_por'), ordenar_de='desc') }}">
+              Ordenar de manera <strong>descendente</strong>
+              <i class='bx bx-sort-down' ></i>
+            </a>
+            {% else %}
+            <a
+              href="{{ url_for('ventas.listar', pagina=request.args.get('pagina'), por_pagina=request.args.get('por_pagina'), ordenar_por=request.args.get('ordenar_por'), ordenar_de='asc') }}">
+              Ordenar de manera <strong>ascendente</strong>
+              <i class='bx bx-sort-up' ></i>
+            </a>
+            {% endif %}
+          </td>
         </tr>
       </tfoot>
     </table>

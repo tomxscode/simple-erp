@@ -1,6 +1,7 @@
 import datetime
 import locale
 from flask import Blueprint, request, jsonify, render_template, flash, redirect, url_for
+from sqlalchemy import asc, desc
 from models.Factura import Factura, DetalleFactura
 from models.Venta import Venta
 from models.Empresa import Empresa
@@ -93,20 +94,28 @@ def listar():
   filtro_estado = request.args.get('filtro_estado', type=int)
   
   ordenar_por = request.args.get('ordenar_por', type=str)
+  ordenar_de = request.args.get('ordenar_de', type=str)
   
   if ordenar_por:
     if ordenar_por == 'fecha':
-      query = query.order_by(Venta.fecha)
+        query = query.order_by(asc(Venta.fecha) if ordenar_de == 'asc' else desc(Venta.fecha))
     elif ordenar_por == 'monto_neto':
-      query = query.order_by(Venta.monto_neto)
+        query = query.order_by(asc(Venta.monto_neto) if ordenar_de == 'asc' else desc(Venta.monto_neto))
     elif ordenar_por == 'monto_iva':
-      query = query.order_by(Venta.monto_iva)
+        query = query.order_by(asc(Venta.monto_iva) if ordenar_de == 'asc' else desc(Venta.monto_iva))
     elif ordenar_por == 'monto_total':
-      query = query.order_by(Venta.monto_total)
+        query = query.order_by(asc(Venta.monto_total) if ordenar_de == 'asc' else desc(Venta.monto_total))
     elif ordenar_por == 'estado':
-      query = query.order_by(Venta.estado)
+        query = query.order_by(asc(Venta.estado) if ordenar_de == 'asc' else desc(Venta.estado))
+    elif ordenar_por == 'empresa_mandante':
+        query = query.join(Empresa).order_by(asc(Empresa.nombre) if ordenar_de == 'asc' else desc(Empresa.nombre))
+    elif ordenar_por == 'empresa_venta':
+        query = query.order_by(asc(Venta.empresa_venta) if ordenar_de == 'asc' else desc(Venta.empresa_venta))
     else:
-      flash('El ordenamiento por no es válido', 'error')
+        flash('El ordenamiento por no es válido', 'error')
+  else:
+    if ordenar_de:
+      flash('No hay nada que ordenar', 'error')
       
   if filtro_mes:
     primer_dia, ultimo_dia = obtener_rango_mes(filtro_mes)

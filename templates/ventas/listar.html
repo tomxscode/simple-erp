@@ -85,7 +85,7 @@
       </thead>
       <tbody>
         {% for venta in ventas %}
-        <tr style="cursor: pointer;">
+        <tr style="cursor: pointer;" onclick="infoVenta({{ venta.id }})">
           <td>{{ convertir_fecha(venta.fecha) }}</td>
           <td>{{ convertir_mes(venta.fecha) }}</td>
           <td>{{ obtener_nombre_empresa(venta.empresa_mandante) }}</td>

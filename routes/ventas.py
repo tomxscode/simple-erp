@@ -20,6 +20,14 @@ def ventas_api():
   if request.method == 'GET':
     ventas = Venta.query.all()
     return jsonify([venta.to_dict() for venta in ventas]), 200
+  elif request.method == "DELETE":
+    id = request.args.get('id')
+    venta = Venta.query.get(id)
+    if not venta:
+      return jsonify({'message': 'Venta no encontrada', 'success': False}), 404
+    db.session.delete(venta)
+    db.session.commit()
+    return jsonify({'message': 'Venta eliminada correctamente', 'success': True}), 200
   
 @ventas.route('/ventas/crear', methods=['GET', 'POST'])
 @login_required

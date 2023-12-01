@@ -6,7 +6,7 @@ from models.Factura import Factura, DetalleFactura
 from models.Venta import Venta
 from models.Empresa import Empresa
 from forms import VentaForm
-from flask_login import current_user
+from flask_login import current_user, login_required
 from models import db
 import openpyxl
 from utils.general import convertir_mes, convertir_fecha, dinero_formato, obtener_rango_mes
@@ -22,6 +22,7 @@ def ventas_api():
     return jsonify([venta.to_dict() for venta in ventas]), 200
   
 @ventas.route('/ventas/crear', methods=['GET', 'POST'])
+@login_required
 def crear_venta():
   form = VentaForm()
   
@@ -87,6 +88,7 @@ def crear_venta():
   return render_template('ventas/crear.html', form=form)
 
 @ventas.route('/ventas/listar', methods=['GET', 'POST'])
+@login_required
 def listar():
   query = Venta.query
   
@@ -159,6 +161,7 @@ def listar():
   return render_template('ventas/listar.html', ventas=ventas, obtener_nombre_empresa=obtener_nombre_empresa, obtener_glosa=obtener_glosa, obtener_num_factura=obtener_num_factura, dinero_formato=dinero_formato, convertir_mes=convertir_mes, convertir_fecha=convertir_fecha)
 
 @ventas.route('/ventas/descargar/todas', methods=['GET'])
+@login_required
 def descargar_todas():
   def obtener_nombre_empresa(empresa_id):
     empresa = Empresa.query.get(empresa_id)

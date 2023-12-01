@@ -9,10 +9,12 @@ from utils.general import convertir_fecha, dinero_formato, actualizar_venta_mont
 from forms import DetalleFacturaForm
 from flask import flash
 from flask import url_for
+from flask_login import login_required
 
 factura = Blueprint('factura', __name__)
 
 @factura.route('/api/factura', methods=['GET', 'POST', 'PUT', 'DELETE'])
+@login_required
 def factura_api():
   # patch
   if request.method == 'GET':
@@ -45,6 +47,7 @@ def factura_api():
   
 
 @factura.route('/factura/<int:id>')
+@login_required
 def ver_factura(id):
   factura = Factura.query.get(id)
   detalles = DetalleFactura.query.filter_by(factura_id=id).all()
@@ -58,6 +61,7 @@ def ver_factura(id):
   return render_template('factura/factura.html', factura=factura, detalles=detalles, obtener_nombre_empresa=obtener_nombre_empresa, convertir_fecha=convertir_fecha, dinero_formato=dinero_formato)
 
 @factura.route('/factura/detalle/<int:id>', methods=['GET', 'POST'])
+@login_required
 def detalle_factura(id):
   form = DetalleFacturaForm()
   factura = Factura.query.get(id)
@@ -85,6 +89,7 @@ def detalle_factura(id):
   return render_template('factura/detalle_factura.html', form=form, factura=factura, convertir_fecha=convertir_fecha, dinero_formato=dinero_formato)
 
 @factura.route('/factura/actualizar/<int:id>')
+@login_required
 def actualizar_montos(id):
   if actualizar_factura(id):
     flash('Factura actualizada correctamente', 'success')

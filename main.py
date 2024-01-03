@@ -14,11 +14,13 @@ from routes.usuario import usuario
 from routes.empresa import empresa
 from routes.ventas import ventas
 from routes.factura import factura
+from routes.empleado import empleado
 
 app.register_blueprint(usuario)
 app.register_blueprint(empresa)
 app.register_blueprint(ventas)
 app.register_blueprint(factura)
+app.register_blueprint(empleado)
 
 with app.app_context():
   db.create_all()

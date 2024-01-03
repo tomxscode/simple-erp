@@ -44,3 +44,15 @@ class DetalleFacturaForm(FlaskForm):
   cantidad = IntegerField('Cantidad', validators=[DataRequired()])
   precio_unitario = IntegerField('Precio Unitario', validators=[DataRequired()])
   submit = SubmitField('Guardar')
+
+# Empleados
+class EmpleadoForm(FlaskForm):
+  rut = StringField('Run', validators=[DataRequired()])
+  nombre = StringField('Nombre', validators=[DataRequired()])
+  apellido = StringField('Apellido', validators=[DataRequired()])
+  email = StringField('Email', validators=[DataRequired()])
+  telefono = StringField('Telefono', validators=[DataRequired()])
+  direccion = StringField('Direccion', validators=[DataRequired()])
+  fecha_nacimiento = DateField('Fecha Nacimiento', validators=[DataRequired()])
+  fecha_ingreso = DateField('Fecha Ingreso', validators=[DataRequired()])
+  submit = SubmitField('Guardar')

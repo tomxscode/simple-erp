@@ -1,0 +1,85 @@
+{% extends "base.html" %}
+{% block titulo %}Registrar empleado{% endblock %}
+{% block contenido %}
+<div class="content">
+	<h1>Registrar colaborador</h1>
+	<form method="post">
+		{{ form.hidden_tag() }}
+		<div class="field">
+			{{ form.rut.label(class="label") }}
+			<div class="control has-icons-left">
+				{{ form.rut(class="input", placeholder="1-9") }}
+				<span class="icon is-small is-left">
+					<i class="bx bxs-user-detail"></i>
+				</span>
+			</div>
+		</div>
+		<div class="field">
+			{{ form.nombre.label(class="label") }}
+			<div class="control has-icons-left">
+				{{ form.nombre(class="input", placeholder="John Juan") }}
+				<span class="icon is-small is-left">
+					<i class='bx bx-user-pin' ></i>
+				</span>
+			</div>
+		</div>
+		<div class="field">
+			{{ form.apellido.label(class="label") }}
+			<div class="control has-icons-left">
+				{{ form.apellido(class="input", placeholder="Doe Gonzáles") }}
+				<span class="icon is-small is-left">
+					<i class='bx bx-user-pin' ></i>
+				</span>
+			</div>
+		</div>
+		<div class="field">
+			{{ form.email.label(class="label") }}
+			<div class="control has-icons-left">
+				{{ form.email(class="input", placeholder="johndoe@example.com") }}
+				<span class="icon is-small is-left">
+					<i class="bx bxs-user-detail"></i>
+				</span>
+			</div>
+		</div>
+		<div class="field">
+			{{ form.telefono.label(class="label") }}
+			<div class="control has-icons-left">
+				{{ form.telefono(class="input", placeholder="912345678") }}
+				<span class="icon is-small is-left">
+					<i class='bx bx-phone' ></i>
+				</span>
+			</div>
+		</div>
+		<div class="field">
+			{{ form.direccion.label(class="label") }}
+			<div class="control has-icons-left">
+				{{ form.direccion(class="input", placeholder="Av. Ejemplo 1920") }}
+				<span class="icon is-small is-left">
+					<i class='bx bx-building-house'></i>
+				</span>
+			</div>
+		</div>
+		<div class="field">
+			{{ form.fecha_nacimiento.label(class="label") }}
+			<div class="control has-icons-left">
+				{{ form.fecha_nacimiento(class="input") }}
+				<span class="icon is-small is-left">
+					<i class='bx bx-party' ></i>
+				</span>
+			</div>
+		</div>
+		<div class="field">
+			{{ form.fecha_ingreso.label(class="label") }}
+			<div class="control has-icons-left">
+				{{ form.fecha_ingreso(class="input") }}
+				<span class="icon is-small is-left">
+					<i class='bx bx-calendar' ></i>
+				</span>
+			</div>
+		</div>
+		<div class="field">
+      {{ form.submit(class="button is-fullwidth is-primary") }}
+    </div>
+	</form>
+</div>
+{% endblock %}
